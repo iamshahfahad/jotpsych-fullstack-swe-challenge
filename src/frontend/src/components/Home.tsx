@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Logout from "./Logout.tsx";
 
 function Home() {
   const [username, setUsername] = useState<string>("");
 
   useEffect(() => {
     const fetchUser = async () => {
-      // get access token
+      const token = localStorage.getItem("token");
 
       if (token) {
         const response = await fetch("http://localhost:3002/user", {
@@ -28,7 +29,10 @@ function Home() {
     <div>
       <h2>Home</h2>
       {username ? (
-        <p>Welcome, {username}!</p>
+        <p>Welcome, {username}!
+          <br/>
+          <Logout/>
+          </p>
       ) : (
         <p>
           Please <Link to="/login">login</Link> or{" "}

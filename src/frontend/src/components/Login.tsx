@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { TextField, Button, Typography, Container, Box, Alert } from "@mui/material";
 
 function Login() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<string>("");
+  const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,38 +18,82 @@ function Login() {
     });
     const data = await response.json();
     if (response.ok) {
-      // do something with access token
-
+      if (data.token) {
+        localStorage.setItem("token", data.token); // Saving the login token in local storage to be accessed by the app
+      }
       setMessage("Login successful");
+      setIsSuccess(true);
     } else {
       setMessage(data.message);
+      setIsSuccess(false);
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      {message && <p>{message}</p>}
-    </div>
+      <Container maxWidth="sm">
+        <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            mt={5}
+            p={3}
+            border={1}
+            borderRadius={2}
+            borderColor="grey.300"
+            sx={{
+              background: "linear-gradient(to bottom right, skyblue, darkblue)",
+              color: "white",
+            }}
+        >
+          <Typography variant="h4" gutterBottom>
+            Login
+          </Typography>
+          <form onSubmit={handleLogin} style={{ width: "100%" }}>
+            <TextField
+                label="Username"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                InputLabelProps={{
+                  style: { color: 'white' },
+                }}
+                InputProps={{
+                  style: { color: 'white' },
+                }}
+            />
+            <TextField
+                label="Password"
+                type="password"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                InputLabelProps={{
+                  style: { color: 'white' },
+                }}
+                InputProps={{
+                  style: { color: 'white' },
+                }}
+            />
+            <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                style={{ marginTop: "1rem", backgroundColor: 'white', color: 'darkblue' }}
+            >
+              Login
+            </Button>
+          </form>
+          {message && (
+              <Alert severity={isSuccess ? "success" : "error"} style={{ marginTop: "1rem" }}>
+                {message}
+              </Alert>
+          )}
+        </Box>
+      </Container>
   );
 }
 

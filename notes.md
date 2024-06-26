@@ -1,0 +1,3 @@
+All the basic tasks have been done. Also implemented the recording api and recorded the 15 seconds audio For the encryption of motto we can use a python library for it and get this one done too
+
+For the trancription service we can just create a function and call it from the upload foler that I created and get the transcription result and update the motto from the same function just like I have done in the register function
